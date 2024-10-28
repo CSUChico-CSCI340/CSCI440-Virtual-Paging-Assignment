@@ -212,7 +212,7 @@ When you submit your assignment, you must provide the following:
 2. A copy of your best predictive paging implementation (pager-predict.c)
 
 If you need to provide additional code for your solution to work you will need to send an
-archived tar package to me via email in addition to submitting code to Turnin. The archived tar package will need to include all of your files and in addition to all of your files should also include the following:
+archived tar package to me via email in addition to submitting code to INGInious. The archived tar package will need to include all of your files and in addition to all of your files should also include the following:
 
 1. A makefile that builds any necessary code
 2. A README explaining how to build and run your code
@@ -235,7 +235,7 @@ During grading, we will run your code using several random seeds and will take t
 If your code generates warnings when building under gcc on the VM using -Wall and -Wextra you will be penalized 1 point per warning. In addition, to receive full credit your submission must:
 * Meet all requirements elicited in this document
 * Code must adhere to good coding practices.
-* Code must be submitted to Turnin prior to due date.
+* Code must be submitted to INGInious prior to due date.
 
 ## Resources
 Refer to your textbook and class notes of OS paging policies and implementations.
