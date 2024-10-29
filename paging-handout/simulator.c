@@ -309,7 +309,7 @@ static void process_unload(int pnum, Process *q) {
 			q->blocked[i] = 1;
 		}
 	q->active = FALSE;
-	sim_log(LOG_LOAD, "process %2d; pc %04d: unloaded\n", pnum, q->pc);
+	sim_log(LOG_LOAD, "process=%2d pc %04d: unloaded\n", pnum, q->pc);
 }
 
 /* do a branch if necessary */
@@ -324,10 +324,10 @@ static void process_dobranch(int pnum, Process *q, Branch *b, Bcontext *c) {
 		if (output)
 			fprintf(output, "%ld,%d,%ld,%ld,%ld,branch_to\n", sysclock, pnum,
 					q->pid, q->kind, q->pc);
-		sim_log(LOG_BRANCH, "process %2d; pc %04d: branch\n", pnum, q->pc);
+		sim_log(LOG_BRANCH, "process=%2d pc %04d: branch\n", pnum, q->pc);
 	} else {
 		q->pc++;
-		sim_log(LOG_BRANCH, "process %2d; pc %04d: no branch\n", pnum, q->pc);
+		sim_log(LOG_BRANCH, "process=%2d pc %04d: no branch\n", pnum, q->pc);
 	}
 	if (q->pc < 0 || q->pc >= q->program->size)
 		q->pc = 0; /* start over */
@@ -430,42 +430,51 @@ static long process_step(int pnum, Process *q) {
 }
 
 /* public routine: swap one page out */
-int pageout(int process, int page) {
+page_operation_result pageout(int process, int page) {
 	if (process < 0 || process >= procs || !processes[process]
 			|| !processes[process]->active || page < 0
 			|| page >= processes[process]->npages)
-		return FALSE;
+		return INVALIDPAGE;
+	if (processes[process]->pages[page] < -PAGEWAIT)
+		return STATEEXISTS;
 	if (processes[process]->pages[page] < 0)
-		return TRUE; /* on its way out */
+		return PAGINGOUT; /* on its way out */
 	if (processes[process]->pages[page] > 0)
-		return FALSE; /* not available to swap out */
+		return PAGINGIN; /* not available to swap out */
 	sim_log(LOG_PAGE, "process=%2d page=%3d start pageout\n", process, page);
 	if (pages)
 		fprintf(pages, "%ld,%d,%d,%ld,%ld,going\n", sysclock, process, page,
 				processes[process]->pid, processes[process]->kind);
 	processes[process]->pages[page] = -1;
-	return TRUE;
+
+	return STARTED;
 }
 
 /* public routine: swap one page in */
-int pagein(int process, int page) {
+page_operation_result pagein(int process, int page) {
 	if (process < 0 || process >= procs || !processes[process]
 			|| !processes[process]->active || page < 0
-			|| page >= processes[process]->npages)
-		return FALSE;
-	if (processes[process]->pages[page] >= 0)
-		return TRUE; /* on its way */
+			|| page >= processes[process]->npages) {
+		printf("Invalid page during page in operation.\n");
+		return INVALIDPAGE;
+	}
+	if (processes[process]->pages[page] > 0)
+		return PAGINGIN; /* on its way */
+	if (processes[process]->pages[page] == 0)
+		return STATEEXISTS; /* already paged in */
 	if (pagesavail == 0)
-		return FALSE;
-	if (processes[process]->pages[page] >= -PAGEWAIT)
-		return FALSE; /* not yet out */
+		return MEMORYFULL;
+	if (processes[process]->pages[page] >= -PAGEWAIT) {
+		return PAGINGOUT; /* not yet out */
+	}
 	sim_log(LOG_PAGE, "process=%2d page=%3d start pagein\n", process, page);
 	if (pages)
 		fprintf(pages, "%ld,%d,%d,%ld,%ld,coming\n", sysclock, process, page,
 				processes[process]->pid, processes[process]->kind);
 	processes[process]->pages[page] = PAGEWAIT;
 	pagesavail--;
-	return TRUE;
+
+	return STARTED;
 }
 
 /*============
@@ -544,20 +553,20 @@ static void allprint() {
 						fprintf(stderr, "*i%3ld", processes[i]->pages[j]);
 					else if (processes[i]->pages[j] == 0)
 						fprintf(stderr, "*=in ");
-					else if (processes[i]->pages[j] == -100)
+					else if (processes[i]->pages[j] == -PAGEWAIT - 1)
 						fprintf(stderr, "*=out");
 					else
-						fprintf(stderr, "*o%3ld", 100 + processes[i]->pages[j]);
+						fprintf(stderr, "*o%3ld", PAGEWAIT + processes[i]->pages[j]);
 					// fprintf(stderr,"*%4d",processes[i]->pages[j]);
 				} else {
 					if (processes[i]->pages[j] > 0)
 						fprintf(stderr, " i%3ld", processes[i]->pages[j]);
 					else if (processes[i]->pages[j] == 0)
 						fprintf(stderr, " =in ");
-					else if (processes[i]->pages[j] == -100)
+					else if (processes[i]->pages[j] == -PAGEWAIT - 1)
 						fprintf(stderr, " =out");
 					else
-						fprintf(stderr, " o%3ld", 100 + processes[i]->pages[j]);
+						fprintf(stderr, " o%3ld", PAGEWAIT + processes[i]->pages[j]);
 					// fprintf(stderr," %4d",processes[i]->pages[j]);
 				}
 			} else {
@@ -602,20 +611,20 @@ static void allprint() {
 						fprintf(stderr, "*i%3ld", processes[i]->pages[j]);
 					else if (processes[i]->pages[j] == 0)
 						fprintf(stderr, "*=in ");
-					else if (processes[i]->pages[j] == -100)
+					else if (processes[i]->pages[j] == -PAGEWAIT - 1)
 						fprintf(stderr, "*=out");
 					else
-						fprintf(stderr, "*o%3ld", 100 + processes[i]->pages[j]);
+						fprintf(stderr, "*o%3ld", PAGEWAIT + processes[i]->pages[j]);
 					// fprintf(stderr,"*%4d",processes[i]->pages[j]);
 				} else {
 					if (processes[i]->pages[j] > 0)
 						fprintf(stderr, " i%3ld", processes[i]->pages[j]);
 					else if (processes[i]->pages[j] == 0)
 						fprintf(stderr, " =in ");
-					else if (processes[i]->pages[j] == -100)
+					else if (processes[i]->pages[j] == -PAGEWAIT - 1)
 						fprintf(stderr, " =out");
 					else
-						fprintf(stderr, " o%3ld", 100 + processes[i]->pages[j]);
+						fprintf(stderr, " o%3ld", PAGEWAIT + processes[i]->pages[j]);
 					// fprintf(stderr," %4d",processes[i]->pages[j]);
 				}
 			} else {
@@ -643,7 +652,7 @@ static void allinit() {
 		if (!empty()) {
 			processes[i] = dequeue();
 
-			sim_log(LOG_LOAD, "process %2d; pc %04d: loaded\n", i,
+			sim_log(LOG_LOAD, "process=%2d pc %04d: loaded\n", i,
 					processes[i]->pc);
 			if (output)
 				fprintf(output, "%ld,%ld,%ld,%ld,%ld,load\n", sysclock, i,
@@ -696,7 +705,7 @@ static void allstep() {
 			processes[i] = NULL;
 			if (!empty()) {
 				processes[i] = dequeue();
-				sim_log(LOG_LOAD, "process %2d; pc %04d: loaded\n", i,
+				sim_log(LOG_LOAD, "process=%2d pc %04d: loaded\n", i,
 						processes[i]->pc);
 				if (output)
 					fprintf(output, "%ld,%ld,%ld,%ld,%ld,load\n", sysclock, i,
@@ -768,8 +777,8 @@ static void allage() {
 									i, j, processes[i]->pid,
 									processes[i]->kind);
 					}
-				} else if (processes[i]->pages[j]
-						< 0 && processes[i]->pages[j]>=-PAGEWAIT) {
+				} else if (processes[i]->pages[j] < 0
+						&& processes[i]->pages[j] >= -PAGEWAIT) {
 					processes[i]->pages[j]--;
 					if (processes[i]->pages[j] < -PAGEWAIT) {
 						sim_log(LOG_PAGE,
@@ -795,16 +804,25 @@ static void callyou() {
 			pentry[i].pc = processes[i]->pc;
 			pentry[i].npages = processes[i]->npages;
 			for (j = 0; j < processes[i]->npages; j++) {
-				pentry[i].pages[j] = (processes[i]->pages[j] == 0);
+				int state = processes[i]->pages[j];
+				if (state == 0)
+					pentry[i].states[j] = IN;
+				else if (state < -PAGEWAIT)
+					pentry[i].states[j] = OUT;
+				else if (state > 0)
+					pentry[i].states[j] = INCOMING;
+				else
+					/* -PAGEWAIT < state < 0 */
+					pentry[i].states[j] = OUTGOING;
 			}
 			for (; j < MAXPROCPAGES; j++)
-				pentry[i].pages[j] = FALSE;
+				pentry[i].states[j] = OUT;
 		} else {
 			pentry[i].active = FALSE;
 			pentry[i].pc = 0;
 			pentry[i].npages = 0;
 			for (j = 0; j < MAXPROCPAGES; j++)
-				pentry[i].pages[j] = FALSE;
+				pentry[i].states[j] = OUT;
 		}
 	}
 	pageit(pentry); /* call your routine */
