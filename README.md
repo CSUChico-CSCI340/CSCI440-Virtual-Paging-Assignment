@@ -210,15 +210,16 @@ We provide some code to help get you started. Feel free to use it as a jumping o
 ### Executables
 -  test-* - Runs simulator using "programs" defined in programs.c and paging strategy defined in pager-*.c. Includes various run-time options. Run with '-help' for details.
 -  test-api - Runs a test of the simulator state changes
--  see.R - An R script for displaying a visualization of the process run/block activity in a simulation. You must first run ./test-* -csv to generate the necessary trace files.
+-  see.R - An R script for displaying a visualization of the process run/block activity in a simulation. You must first run `./test-* -csv` to generate the necessary trace files.
 	- Before you can run R you need to install it if you don’t already have it installed. On Ubuntu you can do the following to install it:
 	```bash
 		$ sudo apt-get update
 		$ sudo apt-get install r-base
 	```
-	- To run visualization, launch R in windowed graphics mode (in Linux: R -g Tk & at the command prompt) from the directory containing the trace files (or use setwd to set your working directory to the directory containing the trace files). Then run source(‘‘see.r’’) at the R command prompt to launch the visualization.
-	- *setwd* requires the working directory you wish to set to follow it in the R command line. To exit from R you just call quit().
-	- This is a useful visualization as it’ll allow you to see when your processes have pages in memory and when you don’t. Additionally, will let you see how long each process spends waiting or how long it takes to run for comparison to previous executions or paging implementations.
+	- To run visualization, launch R in windowed graphics mode (in Linux: `R -g Tk &` at the command prompt) from the directory containing the trace files (or use `setwd` to set your working directory to the directory containing the trace files). Then run `source(‘‘see.R’’)` at the R command prompt to launch the visualization.
+	- `setwd` requires the working directory you wish to set to follow it in the R command line. To exit from R you just call `quit()`.
+	- This is a useful visualization as it’ll allow you to see when your processes have pages in memory and when you don’t. Additionally, it will let you see how long each process spends waiting or how long it takes to run for comparison to previous executions or paging implementations.
+	- Click on one process at a time, and look for red flat lines -- at the very beginning, misses are expected, but anywhere else you see red can help you identify which process(es) are causing misses.
 
 ## What You Must Provide
 When you submit your assignment to [INGInious](https://inginious.csuchico.edu/), you must provide the following:
