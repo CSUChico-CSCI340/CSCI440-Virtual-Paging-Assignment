@@ -226,6 +226,8 @@ When you submit your assignment to [INGInious](https://inginious.csuchico.edu/),
 1. A copy of your LRU paging implementation (pager-lru.c)
 2. A copy of your best predictive paging implementation (pager-predict.c)
 
+Make sure you update the header comment at the top of the *pager-lru.c* and *pager-predict.c* files to include your name as an author. 
+
 ## Grading
 100% of your grade will be based on the performance of the best pager implementation that you provide. The following simulation scores will earn the corresponding number of points:
 * Code does not compile without errors : 0 Points
