@@ -1,7 +1,7 @@
-CSCI340 Virtual Paging Assignment
+CSCI440 Virtual Paging Assignment
 ==================================
 
-CSCI340 (Operating Systems)  
+CSCI440 (Operating Systems)  
 California State University, Chico  
 Public Code
 
