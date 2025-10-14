@@ -184,7 +184,7 @@ The second approach to predictive algorithms is to ignore the knowledge you have
 
 Note that in any predictive operation, you ideally wish to stay 100-200 ticks ahead of the execution of each process. This is the necessary predictive lead time in which you must make paging decisions in order to ensure that the necessary pages are available when the process reaches them and that no blocking time is required. As Figure 3 shows, in addition to swapping in pages predicatively, you must still handle the case where your prediction has failed and are thus forced to reactively swap in the necessary page. This is referred to as a predictive miss. A good predictive algorithm will minimize misses, but still must handle them when they occur. In other words, you can not assume that your predictions will always work and that every currently needed page is already available. Doing so will most likely lead to deadlock.
 
-There are a number of additional predictive notions that might prove useful involving state-space analysis [5], Markov chains [6], and similar techniques. We will leave such solutions to the student to investigate if she wishes. Please see the references section for additional information and ideas.
+There are a number of additional predictive notions that might prove useful involving state-space analysis [4], Markov chains [5], and similar techniques. We will leave such solutions to the student to investigate if she wishes. Please see the references section for additional information and ideas.
 
 ## What's included
 
@@ -252,8 +252,6 @@ If your code generates warnings when building under gcc on the VM using -Wall an
 ## Resources
 Refer to your textbook and class notes of OS paging policies and implementations.
 * If you require a good C language reference, consult K&R[3].
-* The internet[4] is also a good resource for finding information related to solving this
-assignment.
 * You may wish to consult the man page for `make`, which is required to compile and complete this assignment. Note that the first argument to the “man” command is the chapter, ensuring that you access the appropriate version of each man page.
 	* See man man for more information.
 	* man 1 make
@@ -286,6 +284,5 @@ $ ./test-api
 1. Andrew Sayler, Junho Ahn, and Richard Han CSCI3753 - PA4. University of Colorado at Boulder: Spring 2012 https://github.com/asayler/CU-CS3753-PA4
 2. Couch, Alva. Comp111 - A5. Tufts University: Fall 2011. http://www.cs.tufts.edu/ comp/111/assignments/a5.html.
 3. Kernighan, Brian and Dennis, Ritchie. The C Programming Language. Second Edition: 2009. Prentice Hall: New Jersey.
-4. Stevens, Ted. Speech on Net Neutrality Bill. 2006. http://youtu.be/f99PcP0aFNE.
-5. Wikipedia. “State space (dynamical system)”. Wikipedia, The Free Encyclopedia. 2012. http://en.wikipedia.org/w/index.php?title=State_space_(dynamical_ system)&oldid=478401148. Online; accessed 12-April-2012.
-6. Wikipedia. “Markov chain”. Wikipedia, The Free Encyclopedia. 2012. http:// en.wikipedia.org/w/index.php?title=Markov_chain&oldid=486910550. Online; ac- cessed 12-April-2012.
+4. Wikipedia. “State space (dynamical system)”. Wikipedia, The Free Encyclopedia. 2012. http://en.wikipedia.org/w/index.php?title=State_space_(dynamical_system)&oldid=478401148. Online; accessed 12-April-2012.
+5. Wikipedia. “Markov chain”. Wikipedia, The Free Encyclopedia. 2012. http://en.wikipedia.org/w/index.php?title=Markov_chain&oldid=486910550. Online; accessed 12-April-2012.
