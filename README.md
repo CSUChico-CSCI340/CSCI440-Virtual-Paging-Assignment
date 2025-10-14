@@ -282,7 +282,8 @@ $ ./test-api
 
 ## References
 1. Andrew Sayler, Junho Ahn, and Richard Han CSCI3753 - PA4. University of Colorado at Boulder: Spring 2012 https://github.com/asayler/CU-CS3753-PA4
-2. Couch, Alva. Comp111 - A5. Tufts University: Fall 2011. http://www.cs.tufts.edu/ comp/111/assignments/a5.html.
+2. Couch, Alva. Comp111 - A5. Tufts University: Fall 2011. http://www.cs.tufts.edu/comp/111/assignments/a5.html.
 3. Kernighan, Brian and Dennis, Ritchie. The C Programming Language. Second Edition: 2009. Prentice Hall: New Jersey.
 4. Wikipedia. “State space (dynamical system)”. Wikipedia, The Free Encyclopedia. 2012. http://en.wikipedia.org/w/index.php?title=State_space_(dynamical_system)&oldid=478401148. Online; accessed 12-April-2012.
-5. Wikipedia. “Markov chain”. Wikipedia, The Free Encyclopedia. 2012. http://en.wikipedia.org/w/index.php?title=Markov_chain&oldid=486910550. Online; accessed 12-April-2012.
+5. Wikipedia. “Markov chain”. Wikipedia, The Free Encyclopedia. 2025. [http://en.wikipedia.org/w/index.php?title=Markov_chain&oldid=486910550](https://en.wikipedia.org/wiki/Markov_chain). Online; accessed 14-October-2025.
+6. Wikipedia. "Memory paging". Wikipedia, The Free Encyclopedia. 2025. [https://en.wikipedia.org/wiki/Memory_paging](https://en.wikipedia.org/wiki/Memory_paging). Online; accessed 14-October-2025.
