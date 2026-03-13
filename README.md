@@ -244,7 +244,7 @@ Make sure you update the header comment at the top of the *pager-lru.c* and *pag
 
 During grading, we will run your code using several random seeds and will take the average of these runs as your score. Thus, if your program’s performance varies widely from run-to-run, you may get bitten during grading. In the words of Clint Eastwood, “Do I feel lucky?”.
 
-If your code generates warnings when building under gcc on the VM using -Wall and -Wextra you will be penalized 1 point per warning. In addition, to receive full credit your submission must:
+To receive full credit your submission must:
 * Meet all requirements elicited in this document
 * Code must adhere to good coding practices.
 * Code must be submitted to INGInious prior to due date.
