@@ -628,7 +628,7 @@ static void allprint() {
 			"----------------------------------------------------------------------------\n");
 }
 
-static void endit() {
+static void endit(int) {
 	allprint();
 	exit(0);
 }
